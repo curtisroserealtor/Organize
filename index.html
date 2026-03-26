@@ -1,0 +1,1049 @@
+import { useState } from "react";
+
+const CATEGORIES = [
+  {
+    id: "lead-gen",
+    icon: "🎯",
+    title: "Lead Generation & Prospecting",
+    color: "#E63946",
+    priority: "CRITICAL",
+    description: "The lifeblood. No leads = no closings. Period.",
+    kpis: [
+      "20+ new leads/week",
+      "5 listing appointments/week",
+      "2 buyer consultations/week",
+      "SOI touches: 36/year per contact",
+      "Cost per lead < $50",
+    ],
+    nonNegotiables: [
+      "2 hours of prospecting EVERY morning before 10am — non-negotiable power hour",
+      "CRM updated same day — no exceptions",
+      "Weekly lead source ROI review",
+    ],
+    subcategories: [
+      {
+        name: "Sphere of Influence (SOI)",
+        tasks: [
+          { task: "Build master SOI list (min 200 contacts)", priority: "P1", status: "system", week: "1-2" },
+          { task: "Create 36-touch annual plan (calls, texts, pop-bys, mailers, events)", priority: "P1", status: "system", week: "2-3" },
+          { task: "Monthly client appreciation events", priority: "P2", status: "recurring", week: "4+" },
+          { task: "Birthday/anniversary tracking + auto-reminders in CRM", priority: "P1", status: "system", week: "2" },
+          { task: "Quarterly handwritten note campaigns", priority: "P2", status: "recurring", week: "4+" },
+          { task: "Past client referral ask system (90-day post-close)", priority: "P1", status: "system", week: "3" },
+        ],
+      },
+      {
+        name: "Digital Marketing / Online Leads",
+        tasks: [
+          { task: "Google Business Profile — optimize + weekly posts", priority: "P1", status: "system", week: "1" },
+          { task: "Meta (FB/IG) ad campaigns — listing + buyer ads", priority: "P2", status: "system", week: "4-6" },
+          { task: "YouTube neighborhood/market update videos (2x/month)", priority: "P2", status: "recurring", week: "6+" },
+          { task: "SEO-optimized blog content (Fort Worth neighborhoods)", priority: "P3", status: "delegate", week: "8+" },
+          { task: "Email drip campaigns — segmented by lead type", priority: "P1", status: "system", week: "3-4" },
+          { task: "Retargeting pixel setup on website", priority: "P2", status: "system", week: "4" },
+        ],
+      },
+      {
+        name: "Geographic Farming",
+        tasks: [
+          { task: "Identify 2 target farm areas (500 homes each)", priority: "P1", status: "system", week: "2" },
+          { task: "Monthly just-listed/just-sold mailers", priority: "P2", status: "recurring", week: "4+" },
+          { task: "Door-knock new listings in farm", priority: "P2", status: "recurring", week: "4+" },
+          { task: "Neighborhood market report — quarterly", priority: "P2", status: "recurring", week: "6+" },
+        ],
+      },
+      {
+        name: "Referral Networks",
+        tasks: [
+          { task: "Build vendor/partner referral list (lenders, title, inspectors)", priority: "P1", status: "system", week: "1-2" },
+          { task: "Monthly coffee/lunch with top 5 referral partners", priority: "P2", status: "recurring", week: "4+" },
+          { task: "Relocation company outreach", priority: "P3", status: "system", week: "8+" },
+          { task: "Agent-to-agent referral network (out-of-state)", priority: "P3", status: "system", week: "8+" },
+        ],
+      },
+      {
+        name: "Open Houses & Events",
+        tasks: [
+          { task: "Mega open house system (sign plan, follow-up scripts, registration)", priority: "P1", status: "system", week: "3" },
+          { task: "2 open houses per weekend minimum", priority: "P1", status: "recurring", week: "3+" },
+          { task: "Community events (homebuyer seminars, market updates)", priority: "P3", status: "recurring", week: "10+" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "lead-followup",
+    icon: "📞",
+    title: "Lead Follow-Up & Conversion",
+    color: "#F4A261",
+    priority: "CRITICAL",
+    description: "Where 90% of agents fail. Speed to lead wins.",
+    kpis: [
+      "Response time < 5 minutes (new leads)",
+      "Lead-to-appointment conversion: 15%+",
+      "Appointment-to-contract conversion: 40%+",
+      "No lead untouched > 48 hours",
+      "Database contact rate: 80%+",
+    ],
+    nonNegotiables: [
+      "EVERY lead gets a response within 5 minutes during business hours",
+      "Follow-up sequences run automatically — no manual tracking",
+      "Weekly pipeline review every Monday at 8am",
+    ],
+    subcategories: [
+      {
+        name: "Speed to Lead",
+        tasks: [
+          { task: "Auto-responder setup for all lead sources (text + email)", priority: "P1", status: "system", week: "1" },
+          { task: "Lead routing rules in CRM", priority: "P1", status: "system", week: "1-2" },
+          { task: "5-5-5 follow-up script (5 calls, 5 texts, 5 emails over 5 days)", priority: "P1", status: "system", week: "2" },
+          { task: "Hot lead notification system (push alerts)", priority: "P1", status: "system", week: "1" },
+        ],
+      },
+      {
+        name: "Nurture Systems",
+        tasks: [
+          { task: "Long-term nurture drip (12-month auto campaign)", priority: "P1", status: "system", week: "3" },
+          { task: "Lead segmentation: Hot / Warm / Cold / Dead", priority: "P1", status: "system", week: "2" },
+          { task: "Re-engagement campaign for cold leads (quarterly)", priority: "P2", status: "system", week: "4" },
+          { task: "Market update auto-sends (monthly)", priority: "P2", status: "system", week: "3" },
+          { task: "Text message automation sequences", priority: "P1", status: "system", week: "2-3" },
+        ],
+      },
+      {
+        name: "Pipeline Management",
+        tasks: [
+          { task: "Define pipeline stages in CRM (Lead → Nurture → Appt → Active → Contract → Closed)", priority: "P1", status: "system", week: "1" },
+          { task: "Weekly pipeline scrub (update statuses, next actions)", priority: "P1", status: "recurring", week: "2+" },
+          { task: "Stale lead alerts (no activity > 14 days)", priority: "P1", status: "system", week: "2" },
+          { task: "Monthly conversion rate analysis", priority: "P2", status: "recurring", week: "4+" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "listings",
+    icon: "🏠",
+    title: "Listing Management",
+    color: "#2A9D8F",
+    priority: "HIGH",
+    description: "Listings are leverage. They generate leads, build brand, and create inventory.",
+    kpis: [
+      "Average days on market < area average",
+      "List-to-sale price ratio: 98%+",
+      "Listing inventory: 6-10 active at all times",
+      "Seller NPS score: 9+",
+      "Photo/video shoot within 48hrs of signing",
+    ],
+    nonNegotiables: [
+      "Pre-listing packet sent within 2 hours of appointment confirmation",
+      "Professional photography on EVERY listing — no phone pics",
+      "Weekly seller update every Friday by 3pm",
+    ],
+    subcategories: [
+      {
+        name: "Pre-Listing",
+        tasks: [
+          { task: "Create pre-listing packet (digital + print)", priority: "P1", status: "system", week: "2-3" },
+          { task: "CMA template with automated pulls", priority: "P1", status: "system", week: "2" },
+          { task: "Listing presentation deck (value prop, marketing plan, pricing strategy)", priority: "P1", status: "system", week: "2-3" },
+          { task: "Pre-listing questionnaire (seller goals, timeline, condition)", priority: "P1", status: "system", week: "2" },
+          { task: "Staging consultation checklist", priority: "P2", status: "system", week: "4" },
+        ],
+      },
+      {
+        name: "Active Listing Operations",
+        tasks: [
+          { task: "Listing launch checklist (MLS, photos, signs, lockbox, flyers)", priority: "P1", status: "system", week: "3" },
+          { task: "Professional photography/videography/drone scheduling", priority: "P1", status: "system", week: "3" },
+          { task: "Social media listing promotion plan (7-day launch sequence)", priority: "P1", status: "system", week: "3-4" },
+          { task: "Showing feedback system (auto-request after showings)", priority: "P1", status: "system", week: "3" },
+          { task: "Price reduction conversation framework + timeline", priority: "P2", status: "system", week: "4" },
+          { task: "Neighborhood marketing (circle prospecting, door knocking)", priority: "P2", status: "recurring", week: "4+" },
+        ],
+      },
+      {
+        name: "Seller Communication",
+        tasks: [
+          { task: "Weekly seller update template (showings, feedback, market data)", priority: "P1", status: "system", week: "3" },
+          { task: "Offer presentation process (multiple offer system)", priority: "P1", status: "system", week: "3" },
+          { task: "Seller expectation-setting scripts", priority: "P2", status: "system", week: "4" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "buyer-mgmt",
+    icon: "🔑",
+    title: "Buyer Management",
+    color: "#457B9D",
+    priority: "HIGH",
+    description: "Systematize the buyer process so it doesn't eat all your time.",
+    kpis: [
+      "Buyer consultation conversion: 80%+",
+      "Average showings to contract: < 8",
+      "Pre-approval before first showing: 100%",
+      "Buyer satisfaction score: 9+",
+    ],
+    nonNegotiables: [
+      "NO showings without signed buyer agreement + pre-approval",
+      "Buyer consultation before ANY house tours",
+      "Lender intro within 24 hours of first contact",
+    ],
+    subcategories: [
+      {
+        name: "Buyer Onboarding",
+        tasks: [
+          { task: "Buyer consultation presentation", priority: "P1", status: "system", week: "3" },
+          { task: "Buyer needs analysis questionnaire", priority: "P1", status: "system", week: "3" },
+          { task: "Buyer agreement + disclosure packet", priority: "P1", status: "system", week: "2" },
+          { task: "Preferred lender introduction process", priority: "P1", status: "system", week: "2" },
+          { task: "Auto-search setup in MLS portal", priority: "P1", status: "system", week: "3" },
+        ],
+      },
+      {
+        name: "Active Buyer Management",
+        tasks: [
+          { task: "Showing preparation checklist", priority: "P2", status: "system", week: "4" },
+          { task: "Offer writing system (templates, escalation clauses, strategy docs)", priority: "P1", status: "system", week: "3" },
+          { task: "Buyer weekly check-in cadence", priority: "P2", status: "recurring", week: "4+" },
+          { task: "Lost offer debrief + next steps process", priority: "P2", status: "system", week: "4" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "transactions",
+    icon: "📋",
+    title: "Transaction Coordination",
+    color: "#6A4C93",
+    priority: "HIGH",
+    description: "This is where deals die or thrive. Systems here = sanity.",
+    kpis: [
+      "0 missed deadlines per quarter",
+      "Contract-to-close fall-through rate < 5%",
+      "Average days contract-to-close: < 35",
+      "Post-close review sent within 48 hours",
+    ],
+    nonNegotiables: [
+      "Every contract gets a transaction timeline within 2 hours of execution",
+      "All deadlines in CRM + calendar with 48-hour advance alerts",
+      "TC touches file daily — no exceptions",
+    ],
+    subcategories: [
+      {
+        name: "Contract to Close",
+        tasks: [
+          { task: "Master transaction checklist (buyer + seller versions)", priority: "P1", status: "system", week: "2-3" },
+          { task: "Deadline tracker with auto-alerts (option, financing, appraisal, closing)", priority: "P1", status: "system", week: "2" },
+          { task: "Title company coordination workflow", priority: "P1", status: "system", week: "3" },
+          { task: "Inspection negotiation framework", priority: "P1", status: "system", week: "3" },
+          { task: "Appraisal preparation package (for listings)", priority: "P2", status: "system", week: "4" },
+          { task: "Amendment/addendum templates library", priority: "P2", status: "system", week: "4" },
+          { task: "Final walkthrough checklist", priority: "P2", status: "system", week: "4" },
+        ],
+      },
+      {
+        name: "Compliance & Documentation",
+        tasks: [
+          { task: "Document management system (cloud-based, organized by transaction)", priority: "P1", status: "system", week: "1-2" },
+          { task: "TREC compliance checklist", priority: "P1", status: "system", week: "2" },
+          { task: "Commission tracking spreadsheet", priority: "P1", status: "system", week: "2" },
+          { task: "E-signature workflow (DocuSign/Dotloop templates)", priority: "P1", status: "system", week: "2" },
+        ],
+      },
+      {
+        name: "Post-Close",
+        tasks: [
+          { task: "Closing gift system (tiered by price point)", priority: "P2", status: "system", week: "4" },
+          { task: "Post-close survey (automated)", priority: "P1", status: "system", week: "3" },
+          { task: "Review request sequence (Google, Zillow, Realtor.com)", priority: "P1", status: "system", week: "3" },
+          { task: "1-year home anniversary follow-up", priority: "P2", status: "system", week: "4" },
+          { task: "Move to SOI database + nurture sequence", priority: "P1", status: "system", week: "3" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "marketing",
+    icon: "📣",
+    title: "Marketing & Branding",
+    color: "#E76F51",
+    priority: "MEDIUM-HIGH",
+    description: "Your brand is your moat. Marketing compounds over time.",
+    kpis: [
+      "Social media: 4-5 posts/week",
+      "Email open rate: 25%+",
+      "Website traffic: 20% growth QoQ",
+      "Video views: 500+/month",
+      "Google reviews: 2+ new/month",
+    ],
+    nonNegotiables: [
+      "Brand consistency across ALL touchpoints",
+      "Content calendar planned 30 days ahead — always",
+      "Never go dark on social for more than 3 days",
+    ],
+    subcategories: [
+      {
+        name: "Content Creation",
+        tasks: [
+          { task: "30-day content calendar template", priority: "P1", status: "system", week: "3-4" },
+          { task: "Content pillars defined (market updates, lifestyle, behind-scenes, education, listings)", priority: "P1", status: "system", week: "3" },
+          { task: "Video content SOPs (market updates, listing tours, testimonials)", priority: "P2", status: "system", week: "6" },
+          { task: "AI-assisted content creation workflow (ChatGPT/Claude prompts library)", priority: "P1", status: "system", week: "4" },
+          { task: "Photo/video asset library organized by type", priority: "P2", status: "system", week: "6" },
+        ],
+      },
+      {
+        name: "Brand Assets",
+        tasks: [
+          { task: "Brand guide (colors, fonts, logo usage, voice)", priority: "P1", status: "system", week: "4-6" },
+          { task: "Template library (social posts, flyers, postcards, email headers)", priority: "P1", status: "system", week: "4-6" },
+          { task: "Listing marketing package template", priority: "P1", status: "system", week: "3" },
+          { task: "Email signature standardized", priority: "P1", status: "system", week: "1" },
+        ],
+      },
+      {
+        name: "Digital Presence",
+        tasks: [
+          { task: "Website audit + optimization", priority: "P2", status: "system", week: "6" },
+          { task: "IDX integration + landing pages", priority: "P2", status: "system", week: "6" },
+          { task: "Google Business Profile optimization", priority: "P1", status: "system", week: "1" },
+          { task: "Zillow/Realtor.com profile optimization", priority: "P2", status: "system", week: "4" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "finance",
+    icon: "💰",
+    title: "Financial Management",
+    color: "#264653",
+    priority: "HIGH",
+    description: "You're a business. Know your numbers or die slow.",
+    kpis: [
+      "Profit margin: 50%+ of GCI",
+      "Monthly expenses tracked to the penny",
+      "Tax reserves: 30% of every check",
+      "Emergency fund: 3 months expenses",
+      "Cost per transaction < $2,500",
+    ],
+    nonNegotiables: [
+      "30% of every commission check → tax savings account immediately",
+      "Monthly P&L review — no skipping",
+      "Know your cost-per-lead by source",
+    ],
+    subcategories: [
+      {
+        name: "Bookkeeping & Accounting",
+        tasks: [
+          { task: "Separate business bank account + credit card", priority: "P1", status: "system", week: "1" },
+          { task: "Bookkeeping system (QuickBooks Self-Employed or Wave)", priority: "P1", status: "system", week: "1-2" },
+          { task: "Expense categories defined + tracking", priority: "P1", status: "system", week: "2" },
+          { task: "Monthly P&L statement review", priority: "P1", status: "recurring", week: "2+" },
+          { task: "Quarterly tax payment schedule", priority: "P1", status: "system", week: "2" },
+          { task: "Annual budget creation", priority: "P1", status: "system", week: "4" },
+        ],
+      },
+      {
+        name: "Commission & Revenue Tracking",
+        tasks: [
+          { task: "Commission tracker (pending, closed, projected)", priority: "P1", status: "system", week: "2" },
+          { task: "GCI goal tracking dashboard", priority: "P1", status: "system", week: "2-3" },
+          { task: "Referral fee tracking", priority: "P2", status: "system", week: "3" },
+          { task: "Split/cap tracking with brokerage", priority: "P2", status: "system", week: "3" },
+        ],
+      },
+      {
+        name: "ROI Analysis",
+        tasks: [
+          { task: "Lead source cost-per-acquisition tracking", priority: "P1", status: "system", week: "4" },
+          { task: "Marketing spend ROI monthly review", priority: "P1", status: "recurring", week: "4+" },
+          { task: "Technology stack cost audit (quarterly)", priority: "P2", status: "recurring", week: "6+" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "operations",
+    icon: "⚙️",
+    title: "Operations & Systems",
+    color: "#1D3557",
+    priority: "CRITICAL",
+    description: "The backbone. Without this, nothing else scales.",
+    kpis: [
+      "CRM adoption: 100% of contacts entered",
+      "SOP documentation: 100% of repeatable tasks",
+      "Tech stack utilization: 80%+ of features used",
+      "Time in CEO activities: 60%+ of work hours",
+    ],
+    nonNegotiables: [
+      "If you do it more than twice, document it as an SOP",
+      "Weekly time audit — know where every hour goes",
+      "Tech stack review quarterly — cut what you don't use",
+    ],
+    subcategories: [
+      {
+        name: "CRM & Technology",
+        tasks: [
+          { task: "Choose & fully implement CRM (Follow Up Boss, KVCore, or LionDesk)", priority: "P1", status: "system", week: "1" },
+          { task: "All lead sources integrated into CRM", priority: "P1", status: "system", week: "1-2" },
+          { task: "Smart lists and tags architecture", priority: "P1", status: "system", week: "2" },
+          { task: "Automation workflows built (follow-up, nurture, reminders)", priority: "P1", status: "system", week: "2-3" },
+          { task: "Technology stack audit + consolidation", priority: "P1", status: "system", week: "1" },
+          { task: "Calendar blocking system (time-blocked daily schedule)", priority: "P1", status: "system", week: "1" },
+        ],
+      },
+      {
+        name: "SOPs & Documentation",
+        tasks: [
+          { task: "SOP template created", priority: "P1", status: "system", week: "1" },
+          { task: "Document all listing processes", priority: "P1", status: "system", week: "3-4" },
+          { task: "Document all buyer processes", priority: "P1", status: "system", week: "3-4" },
+          { task: "Document all transaction processes", priority: "P1", status: "system", week: "3-4" },
+          { task: "Document all marketing processes", priority: "P1", status: "system", week: "4-6" },
+          { task: "Video SOPs (Loom recordings of all key processes)", priority: "P2", status: "system", week: "6-8" },
+          { task: "Central SOP library (Google Drive or Notion)", priority: "P1", status: "system", week: "1" },
+        ],
+      },
+      {
+        name: "AI & Automation",
+        tasks: [
+          { task: "AI prompt library for common tasks (descriptions, emails, social posts)", priority: "P1", status: "system", week: "2-3" },
+          { task: "Zapier/Make automations (lead routing, task creation, notifications)", priority: "P1", status: "system", week: "3-4" },
+          { task: "Auto text/email sequences for every lead stage", priority: "P1", status: "system", week: "2-3" },
+          { task: "Chatbot on website for lead capture", priority: "P3", status: "system", week: "8+" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "team",
+    icon: "👥",
+    title: "Team Building & Leverage",
+    color: "#BC4749",
+    priority: "MEDIUM-HIGH",
+    description: "You can't scale what's in your head. Hire strategically.",
+    kpis: [
+      "Hours saved per week per hire: 15+",
+      "Cost of hire < 30% of value created",
+      "Agent production: 12+ transactions/year within 12 months",
+      "Retention rate: 80%+ annually",
+    ],
+    nonNegotiables: [
+      "NEVER hire until the SOP exists for their role",
+      "90-day onboarding plan for every hire",
+      "Weekly 1-on-1 with every team member",
+    ],
+    subcategories: [
+      {
+        name: "Hire #1: Transaction Coordinator (MONTH 1-2)",
+        tasks: [
+          { task: "Write TC job description", priority: "P1", status: "system", week: "4" },
+          { task: "Define TC responsibilities + KPIs", priority: "P1", status: "system", week: "4" },
+          { task: "Create TC onboarding checklist", priority: "P1", status: "system", week: "5" },
+          { task: "Build TC training manual", priority: "P1", status: "system", week: "5-6" },
+          { task: "Hire TC (part-time to start, $18-25/hr or per-file $350-500)", priority: "P1", status: "hire", week: "6-8" },
+        ],
+      },
+      {
+        name: "Hire #2: Virtual Assistant (MONTH 2-3)",
+        tasks: [
+          { task: "Write VA job description", priority: "P2", status: "system", week: "6" },
+          { task: "Define VA task list (social media, CRM entry, follow-up, scheduling)", priority: "P2", status: "system", week: "6" },
+          { task: "Create VA training program", priority: "P2", status: "system", week: "7" },
+          { task: "Hire VA (Philippines-based, $6-10/hr, 20-40hrs/week)", priority: "P2", status: "hire", week: "8-10" },
+        ],
+      },
+      {
+        name: "Hire #3: Showing Assistant / Buyer's Agent (MONTH 4-6)",
+        tasks: [
+          { task: "Write buyer's agent job description", priority: "P2", status: "system", week: "10" },
+          { task: "Commission split structure defined", priority: "P2", status: "system", week: "10" },
+          { task: "Buyer's agent training program", priority: "P2", status: "system", week: "12" },
+          { task: "Interview + hire buyer's agent", priority: "P2", status: "hire", week: "14-16" },
+        ],
+      },
+      {
+        name: "Hire #4: Marketing Coordinator (MONTH 6-9)",
+        tasks: [
+          { task: "Write marketing coordinator job description", priority: "P3", status: "system", week: "16" },
+          { task: "Define content calendar ownership", priority: "P3", status: "system", week: "16" },
+          { task: "Hire marketing coordinator (part-time, $18-22/hr)", priority: "P3", status: "hire", week: "20+" },
+        ],
+      },
+    ],
+  },
+  {
+    id: "personal",
+    icon: "🧠",
+    title: "Personal Development & ADHD Management",
+    color: "#606C38",
+    priority: "CRITICAL",
+    description: "Your brain is your instrument. Manage it or it manages you.",
+    kpis: [
+      "Morning routine completed: 90%+ of days",
+      "Time-blocked calendar adherence: 80%+",
+      "Weekly review completed: 100%",
+      "CE hours on track quarterly",
+      "Burnout score self-check: monthly",
+    ],
+    nonNegotiables: [
+      "Non-negotiable morning routine (same time every day)",
+      "Sunday night: plan the entire week in time blocks",
+      "NEVER rely on memory — everything goes in the system",
+    ],
+    subcategories: [
+      {
+        name: "ADHD-Specific Systems",
+        tasks: [
+          { task: "Time-blocking daily schedule (color-coded, recurring)", priority: "P1", status: "system", week: "1" },
+          { task: "Single task capture inbox (one place for all thoughts — Todoist or Notion)", priority: "P1", status: "system", week: "1" },
+          { task: "Decision fatigue reduction (meal prep, outfit planning, routine)", priority: "P1", status: "system", week: "1" },
+          { task: "Body doubling / accountability partner", priority: "P2", status: "system", week: "2" },
+          { task: "Pomodoro timers for prospecting blocks", priority: "P1", status: "system", week: "1" },
+          { task: "End-of-day shutdown routine (CRM update, tomorrow's plan, inbox zero)", priority: "P1", status: "system", week: "1" },
+          { task: "Weekly review ritual (Friday 3-4pm, non-negotiable)", priority: "P1", status: "recurring", week: "1+" },
+        ],
+      },
+      {
+        name: "Professional Growth",
+        tasks: [
+          { task: "Annual business plan + quarterly goals", priority: "P1", status: "system", week: "2" },
+          { task: "Continuing education tracking", priority: "P2", status: "system", week: "4" },
+          { task: "Coaching/mastermind group", priority: "P2", status: "system", week: "4" },
+          { task: "Monthly self-assessment (what's working, what's not)", priority: "P1", status: "recurring", week: "4+" },
+          { task: "Book/podcast learning schedule", priority: "P3", status: "recurring", week: "4+" },
+        ],
+      },
+    ],
+  },
+];
+
+const HIRE_DESCRIPTIONS = [
+  {
+    title: "Transaction Coordinator",
+    timing: "HIRE FIRST — Month 1-2",
+    type: "Part-time → Full-time",
+    pay: "$18-25/hr or $350-500/file",
+    why: "Frees 10-15 hrs/week immediately. Highest ROI first hire.",
+    responsibilities: [
+      "Manage contract-to-close process for all transactions",
+      "Track and manage all deadlines (option, financing, appraisal, closing)",
+      "Coordinate with title, lender, inspectors, and all parties",
+      "Ensure all documents are collected, signed, and filed",
+      "Send weekly status updates to clients",
+      "Maintain transaction files in compliance with TREC",
+      "Schedule inspections, appraisals, and walkthroughs",
+      "Prepare closing documents and coordinate closing day logistics",
+    ],
+    kpis: ["Zero missed deadlines", "< 5% fall-through rate", "Client satisfaction 9+/10", "File audit pass rate: 100%"],
+  },
+  {
+    title: "Virtual Assistant",
+    timing: "HIRE SECOND — Month 2-3",
+    type: "Part-time (20-40 hrs/week)",
+    pay: "$6-10/hr (overseas) or $15-20/hr (US-based)",
+    why: "Handles the repetitive tasks that destroy your focus.",
+    responsibilities: [
+      "CRM data entry and database management",
+      "Social media content scheduling and engagement",
+      "Email and calendar management",
+      "Lead follow-up (initial text/email sequences)",
+      "Listing input into MLS and syndication sites",
+      "Flyer, postcard, and marketing material creation from templates",
+      "Research and compile CMAs",
+      "Vendor coordination and scheduling",
+    ],
+    kpis: ["CRM updated same-day: 100%", "Social posts published on schedule: 95%+", "Response time to assigned tasks: < 2hrs", "Accuracy rate: 98%+"],
+  },
+  {
+    title: "Buyer's Agent / Showing Assistant",
+    timing: "HIRE THIRD — Month 4-6",
+    type: "Licensed agent, IC",
+    pay: "50/50 split (team leads) or 60/40 (self-gen)",
+    why: "You should only be on listing appointments + high-value activities.",
+    responsibilities: [
+      "Conduct buyer consultations (after training)",
+      "Show properties to qualified buyers",
+      "Write and present offers",
+      "Negotiate on behalf of buyers",
+      "Attend inspections and walkthroughs",
+      "Hold open houses (lead generation for the team)",
+      "Maintain pipeline in CRM with weekly updates",
+      "Prospect 2 hours daily for self-generated business",
+    ],
+    kpis: ["12+ closings in first year", "Buyer consultation conversion: 70%+", "Client satisfaction: 9+/10", "CRM compliance: 100%"],
+  },
+  {
+    title: "Marketing Coordinator",
+    timing: "HIRE FOURTH — Month 6-9",
+    type: "Part-time (20-30 hrs/week)",
+    pay: "$18-22/hr",
+    why: "Consistent marketing is what makes 80 deals look inevitable.",
+    responsibilities: [
+      "Execute 30-day content calendar",
+      "Shoot/edit listing photos and video content",
+      "Manage all social media accounts",
+      "Design marketing materials (Canva, templates)",
+      "Coordinate listing marketing launches",
+      "Manage email marketing campaigns",
+      "Track marketing analytics and report monthly",
+      "Manage online reviews and reputation",
+    ],
+    kpis: ["Content calendar executed 100%", "Engagement rate growth: 10%+ MoM", "2+ new Google reviews/month", "Listing marketing live within 48hrs"],
+  },
+];
+
+const ROADMAP_PHASES = [
+  {
+    phase: "Phase 1: Foundation",
+    weeks: "Weeks 1-2",
+    focus: "Stop the bleeding. Get the basics locked.",
+    color: "#E63946",
+    items: [
+      "Choose + implement CRM (Follow Up Boss recommended)",
+      "Set up calendar time-blocking system",
+      "Create SOP template + central library (Notion or Google Drive)",
+      "Implement ADHD management systems (capture inbox, shutdown routine)",
+      "Set up document management (Google Drive structure)",
+      "Separate business bank account",
+      "Define pipeline stages in CRM",
+      "Auto-responder for all lead sources",
+      "SOI master list — build to 200+",
+      "Google Business Profile optimized",
+    ],
+  },
+  {
+    phase: "Phase 2: Core Systems",
+    weeks: "Weeks 3-6",
+    focus: "Build the machine that runs without you thinking.",
+    color: "#F4A261",
+    items: [
+      "Build all follow-up sequences (5-5-5, long-term nurture, post-close)",
+      "Pre-listing packet + listing presentation created",
+      "Buyer consultation system built",
+      "Master transaction checklists (buyer + seller)",
+      "AI prompt library created",
+      "Content calendar template + first 30 days planned",
+      "Lead segmentation system live",
+      "Open house system documented",
+      "Post-close review + referral request sequence built",
+      "Hire Transaction Coordinator",
+    ],
+  },
+  {
+    phase: "Phase 3: Optimization",
+    weeks: "Weeks 6-12",
+    focus: "Refine, delegate, accelerate.",
+    color: "#2A9D8F",
+    items: [
+      "All listing + buyer + transaction SOPs documented",
+      "Video SOPs recorded (Loom)",
+      "Hire Virtual Assistant",
+      "All marketing SOPs documented + delegated to VA",
+      "Zapier/Make automations live",
+      "Geographic farm launched",
+      "Brand guide finalized",
+      "Website optimized",
+      "Monthly P&L review rhythm established",
+      "First quarterly business review",
+    ],
+  },
+  {
+    phase: "Phase 4: Scale",
+    weeks: "Weeks 12-24",
+    focus: "Add people. Double production. Become the CEO.",
+    color: "#457B9D",
+    items: [
+      "Hire Buyer's Agent",
+      "Agent training program built",
+      "Team meeting rhythm established (weekly huddle, monthly deep dive)",
+      "Commission + split tracking for team",
+      "Hire Marketing Coordinator",
+      "Referral network formalized (5+ active partners)",
+      "All systems stress-tested at 80 transactions/year pace",
+      "Quarterly goal review + annual plan refresh",
+      "Transition to 60%+ CEO time (listings, strategy, team building)",
+      "Hit 80 transaction run rate",
+    ],
+  },
+];
+
+// Utility
+const statusColors = {
+  system: { bg: "#DBEAFE", text: "#1E40AF", label: "Build System" },
+  recurring: { bg: "#D1FAE5", text: "#065F46", label: "Recurring" },
+  delegate: { bg: "#FEF3C7", text: "#92400E", label: "Delegate" },
+  hire: { bg: "#FCE7F3", text: "#9D174D", label: "Hire" },
+};
+
+const priorityColors = {
+  P1: "#E63946",
+  P2: "#F4A261",
+  P3: "#A8DADC",
+};
+
+export default function RealEstateBlueprint() {
+  const [activeTab, setActiveTab] = useState("overview");
+  const [expandedCat, setExpandedCat] = useState(null);
+  const [expandedHire, setExpandedHire] = useState(null);
+  const [filter, setFilter] = useState("all");
+
+  const totalTasks = CATEGORIES.reduce(
+    (sum, cat) => sum + cat.subcategories.reduce((s, sub) => s + sub.tasks.length, 0),
+    0
+  );
+  const p1Tasks = CATEGORIES.reduce(
+    (sum, cat) =>
+      sum + cat.subcategories.reduce((s, sub) => s + sub.tasks.filter((t) => t.priority === "P1").length, 0),
+    0
+  );
+
+  const tabs = [
+    { id: "overview", label: "Overview" },
+    { id: "categories", label: "All Tasks" },
+    { id: "roadmap", label: "Roadmap" },
+    { id: "hires", label: "Key Hires" },
+    { id: "kpis", label: "KPIs" },
+  ];
+
+  return (
+    <div style={{ fontFamily: "'Instrument Sans', 'DM Sans', system-ui, sans-serif", background: "#0C0C0E", color: "#E8E6E1", minHeight: "100vh" }}>
+      <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+      {/* Header */}
+      <div style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)", padding: "32px 20px 24px", borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto" }}>
+          <div style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", color: "#F4A261", letterSpacing: 3, textTransform: "uppercase", marginBottom: 8 }}>
+            Business System Blueprint
+          </div>
+          <h1 style={{ fontSize: 28, fontWeight: 700, margin: "0 0 6px", lineHeight: 1.2, color: "#fff" }}>
+            From Chaos to Control
+          </h1>
+          <p style={{ fontSize: 14, color: "#8B8B9E", margin: 0, lineHeight: 1.5 }}>
+            40 → 80 transactions/year &nbsp;·&nbsp; $38M → $76M volume &nbsp;·&nbsp; Fort Worth, TX
+          </p>
+          <div style={{ display: "flex", gap: 16, marginTop: 20, flexWrap: "wrap" }}>
+            {[
+              { n: totalTasks, l: "Total Tasks" },
+              { n: p1Tasks, l: "P1 Critical" },
+              { n: CATEGORIES.length, l: "Categories" },
+              { n: "4", l: "Key Hires" },
+            ].map((s, i) => (
+              <div key={i} style={{ background: "rgba(255,255,255,0.05)", borderRadius: 10, padding: "12px 18px", minWidth: 80 }}>
+                <div style={{ fontSize: 22, fontWeight: 700, color: "#fff" }}>{s.n}</div>
+                <div style={{ fontSize: 11, color: "#8B8B9E", marginTop: 2 }}>{s.l}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Tabs */}
+      <div style={{ borderBottom: "1px solid rgba(255,255,255,0.06)", position: "sticky", top: 0, zIndex: 10, background: "#0C0C0E" }}>
+        <div style={{ maxWidth: 900, margin: "0 auto", display: "flex", gap: 0, overflowX: "auto", padding: "0 20px" }}>
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setActiveTab(t.id)}
+              style={{
+                padding: "14px 18px",
+                fontSize: 13,
+                fontWeight: activeTab === t.id ? 600 : 400,
+                color: activeTab === t.id ? "#F4A261" : "#6B6B7B",
+                background: "none",
+                border: "none",
+                borderBottom: activeTab === t.id ? "2px solid #F4A261" : "2px solid transparent",
+                cursor: "pointer",
+                whiteSpace: "nowrap",
+                fontFamily: "inherit",
+                transition: "all 0.2s",
+              }}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: "24px 20px 60px" }}>
+        {/* OVERVIEW TAB */}
+        {activeTab === "overview" && (
+          <div>
+            <div style={{ background: "linear-gradient(135deg, rgba(228,163,97,0.08), rgba(230,57,70,0.05))", border: "1px solid rgba(244,162,97,0.15)", borderRadius: 12, padding: 24, marginBottom: 28 }}>
+              <h2 style={{ fontSize: 18, fontWeight: 700, margin: "0 0 12px", color: "#F4A261" }}>The Problem</h2>
+              <p style={{ fontSize: 14, lineHeight: 1.7, color: "#C4C4D4", margin: 0 }}>
+                You're doing $38M in volume — top 1% of agents — but it all lives in your head. With ADHD, that's not a quirk, it's a ticking time bomb. Every follow-up you forget, every system that doesn't exist, every task you're manually tracking is friction that prevents scale. You don't need to work harder. You need to build the machine that works <em>for</em> you.
+              </p>
+            </div>
+
+            <h3 style={{ fontSize: 16, fontWeight: 600, marginBottom: 16, color: "#fff" }}>Category Priority Map</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {CATEGORIES.map((cat) => {
+                const taskCount = cat.subcategories.reduce((s, sub) => s + sub.tasks.length, 0);
+                const p1Count = cat.subcategories.reduce((s, sub) => s + sub.tasks.filter((t) => t.priority === "P1").length, 0);
+                return (
+                  <div
+                    key={cat.id}
+                    onClick={() => { setActiveTab("categories"); setExpandedCat(expandedCat === cat.id ? null : cat.id); }}
+                    style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", background: "rgba(255,255,255,0.03)", borderRadius: 10, cursor: "pointer", borderLeft: `3px solid ${cat.color}`, transition: "background 0.2s" }}
+                  >
+                    <span style={{ fontSize: 22 }}>{cat.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}>{cat.title}</div>
+                      <div style={{ fontSize: 12, color: "#6B6B7B" }}>{taskCount} tasks · {p1Count} critical</div>
+                    </div>
+                    <span style={{ fontSize: 11, fontFamily: "'JetBrains Mono', monospace", padding: "4px 10px", borderRadius: 6, background: cat.priority === "CRITICAL" ? "rgba(230,57,70,0.15)" : cat.priority === "HIGH" ? "rgba(244,162,97,0.15)" : "rgba(42,157,143,0.15)", color: cat.priority === "CRITICAL" ? "#E63946" : cat.priority === "HIGH" ? "#F4A261" : "#2A9D8F" }}>
+                      {cat.priority}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div style={{ marginTop: 28, padding: 20, background: "rgba(255,255,255,0.03)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
+              <h3 style={{ fontSize: 16, fontWeight: 600, margin: "0 0 12px", color: "#fff" }}>Your North Star Numbers</h3>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+                {[
+                  { label: "Current GCI", value: "$38M vol", sub: "~$1.14M GCI" },
+                  { label: "Target GCI", value: "$76M vol", sub: "~$2.28M GCI" },
+                  { label: "Transactions", value: "40 → 80", sub: "per year" },
+                  { label: "Avg Price", value: "$950K", sub: "Fort Worth luxury" },
+                ].map((n, i) => (
+                  <div key={i} style={{ padding: 14, background: "rgba(255,255,255,0.03)", borderRadius: 8 }}>
+                    <div style={{ fontSize: 11, color: "#6B6B7B", marginBottom: 4 }}>{n.label}</div>
+                    <div style={{ fontSize: 18, fontWeight: 700, color: "#fff" }}>{n.value}</div>
+                    <div style={{ fontSize: 11, color: "#8B8B9E" }}>{n.sub}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* CATEGORIES TAB */}
+        {activeTab === "categories" && (
+          <div>
+            <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+              {["all", "P1", "P2", "P3"].map((f) => (
+                <button
+                  key={f}
+                  onClick={() => setFilter(f)}
+                  style={{
+                    padding: "6px 14px",
+                    borderRadius: 20,
+                    fontSize: 12,
+                    fontWeight: 500,
+                    border: "1px solid",
+                    borderColor: filter === f ? "#F4A261" : "rgba(255,255,255,0.1)",
+                    background: filter === f ? "rgba(244,162,97,0.12)" : "transparent",
+                    color: filter === f ? "#F4A261" : "#8B8B9E",
+                    cursor: "pointer",
+                    fontFamily: "inherit",
+                  }}
+                >
+                  {f === "all" ? "All Tasks" : `${f} Priority`}
+                </button>
+              ))}
+            </div>
+
+            {CATEGORIES.map((cat) => {
+              const isOpen = expandedCat === cat.id;
+              const filteredSubs = cat.subcategories
+                .map((sub) => ({
+                  ...sub,
+                  tasks: filter === "all" ? sub.tasks : sub.tasks.filter((t) => t.priority === filter),
+                }))
+                .filter((sub) => sub.tasks.length > 0);
+
+              if (filter !== "all" && filteredSubs.length === 0) return null;
+
+              return (
+                <div key={cat.id} style={{ marginBottom: 12 }}>
+                  <div
+                    onClick={() => setExpandedCat(isOpen ? null : cat.id)}
+                    style={{ display: "flex", alignItems: "center", gap: 12, padding: "16px", background: isOpen ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)", borderRadius: isOpen ? "12px 12px 0 0" : 12, cursor: "pointer", borderLeft: `3px solid ${cat.color}`, transition: "all 0.2s" }}
+                  >
+                    <span style={{ fontSize: 20 }}>{cat.icon}</span>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 15, fontWeight: 600, color: "#fff" }}>{cat.title}</div>
+                      <div style={{ fontSize: 12, color: "#6B6B7B", marginTop: 2 }}>{cat.description}</div>
+                    </div>
+                    <span style={{ color: "#6B6B7B", fontSize: 18, transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s" }}>▾</span>
+                  </div>
+
+                  {isOpen && (
+                    <div style={{ background: "rgba(255,255,255,0.02)", borderRadius: "0 0 12px 12px", padding: "4px 16px 16px", borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+                      {/* Non-negotiables */}
+                      <div style={{ margin: "12px 0 16px", padding: 14, background: "rgba(230,57,70,0.06)", borderRadius: 8, border: "1px solid rgba(230,57,70,0.12)" }}>
+                        <div style={{ fontSize: 11, fontWeight: 700, color: "#E63946", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>Non-Negotiables</div>
+                        {cat.nonNegotiables.map((nn, i) => (
+                          <div key={i} style={{ fontSize: 13, color: "#C4C4D4", lineHeight: 1.6, paddingLeft: 16, position: "relative" }}>
+                            <span style={{ position: "absolute", left: 0, color: "#E63946" }}>■</span>{nn}
+                          </div>
+                        ))}
+                      </div>
+
+                      {filteredSubs.map((sub, si) => (
+                        <div key={si} style={{ marginBottom: 16 }}>
+                          <div style={{ fontSize: 13, fontWeight: 600, color: cat.color, marginBottom: 8, paddingBottom: 6, borderBottom: `1px solid rgba(255,255,255,0.04)` }}>{sub.name}</div>
+                          {sub.tasks.map((task, ti) => (
+                            <div key={ti} style={{ display: "flex", alignItems: "flex-start", gap: 10, padding: "8px 0", borderBottom: "1px solid rgba(255,255,255,0.02)" }}>
+                              <span style={{ width: 6, height: 6, borderRadius: "50%", background: priorityColors[task.priority], marginTop: 6, flexShrink: 0 }} />
+                              <div style={{ flex: 1 }}>
+                                <div style={{ fontSize: 13, color: "#E8E6E1", lineHeight: 1.5 }}>{task.task}</div>
+                              </div>
+                              <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
+                                <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", padding: "2px 6px", borderRadius: 4, background: statusColors[task.status].bg, color: statusColors[task.status].text }}>
+                                  {statusColors[task.status].label}
+                                </span>
+                                <span style={{ fontSize: 10, fontFamily: "'JetBrains Mono', monospace", color: "#6B6B7B", minWidth: 36, textAlign: "right" }}>
+                                  W{task.week}
+                                </span>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* ROADMAP TAB */}
+        {activeTab === "roadmap" && (
+          <div>
+            <p style={{ fontSize: 14, color: "#8B8B9E", marginBottom: 24, lineHeight: 1.6 }}>
+              This is the implementation sequence. Don't skip phases. Don't try to do it all at once. Your ADHD brain will want to — resist that. Each phase builds on the last.
+            </p>
+            {ROADMAP_PHASES.map((phase, pi) => (
+              <div key={pi} style={{ marginBottom: 24 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+                  <div style={{ width: 36, height: 36, borderRadius: "50%", background: phase.color, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#fff" }}>
+                    {pi + 1}
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>{phase.phase}</div>
+                    <div style={{ fontSize: 12, color: phase.color, fontFamily: "'JetBrains Mono', monospace" }}>{phase.weeks}</div>
+                  </div>
+                </div>
+                <div style={{ marginLeft: 18, borderLeft: `2px solid ${phase.color}30`, paddingLeft: 24 }}>
+                  <div style={{ fontSize: 13, color: "#F4A261", fontStyle: "italic", marginBottom: 12 }}>{phase.focus}</div>
+                  {phase.items.map((item, ii) => (
+                    <div key={ii} style={{ display: "flex", alignItems: "flex-start", gap: 10, marginBottom: 8 }}>
+                      <div style={{ width: 18, height: 18, borderRadius: 4, border: "1.5px solid rgba(255,255,255,0.15)", flexShrink: 0, marginTop: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <span style={{ fontSize: 10, color: "#6B6B7B" }}>{ii + 1}</span>
+                      </div>
+                      <span style={{ fontSize: 13, color: "#C4C4D4", lineHeight: 1.5 }}>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* HIRES TAB */}
+        {activeTab === "hires" && (
+          <div>
+            <p style={{ fontSize: 14, color: "#8B8B9E", marginBottom: 24, lineHeight: 1.6 }}>
+              Hire in this order. Never hire before the SOP exists. A person without a system is just another problem.
+            </p>
+            {HIRE_DESCRIPTIONS.map((hire, hi) => {
+              const isOpen = expandedHire === hi;
+              return (
+                <div key={hi} style={{ marginBottom: 12 }}>
+                  <div
+                    onClick={() => setExpandedHire(isOpen ? null : hi)}
+                    style={{ display: "flex", alignItems: "center", gap: 14, padding: 16, background: isOpen ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.02)", borderRadius: isOpen ? "12px 12px 0 0" : 12, cursor: "pointer", transition: "all 0.2s" }}
+                  >
+                    <div style={{ width: 36, height: 36, borderRadius: "50%", background: ["#E63946","#F4A261","#2A9D8F","#457B9D"][hi], display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, fontWeight: 700, color: "#fff" }}>
+                      {hi + 1}
+                    </div>
+                    <div style={{ flex: 1 }}>
+                      <div style={{ fontSize: 15, fontWeight: 600, color: "#fff" }}>{hire.title}</div>
+                      <div style={{ fontSize: 12, color: "#6B6B7B" }}>{hire.timing} · {hire.pay}</div>
+                    </div>
+                    <span style={{ color: "#6B6B7B", fontSize: 18, transform: isOpen ? "rotate(180deg)" : "rotate(0)", transition: "transform 0.2s" }}>▾</span>
+                  </div>
+                  {isOpen && (
+                    <div style={{ background: "rgba(255,255,255,0.02)", borderRadius: "0 0 12px 12px", padding: 16, borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+                      <div style={{ fontSize: 13, color: "#F4A261", fontStyle: "italic", marginBottom: 14 }}>{hire.why}</div>
+
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#8B8B9E", letterSpacing: 1, textTransform: "uppercase", marginBottom: 8 }}>Responsibilities</div>
+                      {hire.responsibilities.map((r, ri) => (
+                        <div key={ri} style={{ fontSize: 13, color: "#C4C4D4", lineHeight: 1.7, paddingLeft: 14, position: "relative", marginBottom: 2 }}>
+                          <span style={{ position: "absolute", left: 0, color: "#6B6B7B" }}>·</span>{r}
+                        </div>
+                      ))}
+
+                      <div style={{ fontSize: 12, fontWeight: 700, color: "#8B8B9E", letterSpacing: 1, textTransform: "uppercase", marginTop: 16, marginBottom: 8 }}>KPIs</div>
+                      {hire.kpis.map((k, ki) => (
+                        <div key={ki} style={{ fontSize: 13, color: "#2A9D8F", lineHeight: 1.7, paddingLeft: 14, position: "relative", marginBottom: 2 }}>
+                          <span style={{ position: "absolute", left: 0 }}>✓</span>{k}
+                        </div>
+                      ))}
+
+                      <div style={{ marginTop: 14, padding: 12, background: "rgba(255,255,255,0.03)", borderRadius: 8, fontSize: 12, color: "#8B8B9E" }}>
+                        <strong style={{ color: "#C4C4D4" }}>Type:</strong> {hire.type}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        )}
+
+        {/* KPIs TAB */}
+        {activeTab === "kpis" && (
+          <div>
+            <p style={{ fontSize: 14, color: "#8B8B9E", marginBottom: 24, lineHeight: 1.6 }}>
+              What gets measured gets managed. Review these weekly (quick scan) and monthly (deep dive). Print them. Put them on your wall.
+            </p>
+            {CATEGORIES.map((cat) => (
+              <div key={cat.id} style={{ marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+                  <span style={{ fontSize: 18 }}>{cat.icon}</span>
+                  <span style={{ fontSize: 15, fontWeight: 600, color: cat.color }}>{cat.title}</span>
+                </div>
+                <div style={{ background: "rgba(255,255,255,0.02)", borderRadius: 10, padding: 14, borderLeft: `3px solid ${cat.color}` }}>
+                  {cat.kpis.map((kpi, ki) => (
+                    <div key={ki} style={{ display: "flex", alignItems: "center", gap: 10, padding: "6px 0", borderBottom: ki < cat.kpis.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+                      <div style={{ width: 8, height: 8, borderRadius: 2, background: cat.color, opacity: 0.6, flexShrink: 0 }} />
+                      <span style={{ fontSize: 13, color: "#C4C4D4", lineHeight: 1.5 }}>{kpi}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div style={{ marginTop: 28, padding: 20, background: "rgba(244,162,97,0.06)", borderRadius: 12, border: "1px solid rgba(244,162,97,0.12)" }}>
+              <h3 style={{ fontSize: 15, fontWeight: 700, margin: "0 0 10px", color: "#F4A261" }}>Weekly Review Checklist</h3>
+              <div style={{ fontSize: 13, color: "#C4C4D4", lineHeight: 1.8 }}>
+                {[
+                  "How many new leads came in? From which sources?",
+                  "How many appointments set? How many kept?",
+                  "What's my pipeline value (pending + active)?",
+                  "Did every lead get followed up within 5 minutes?",
+                  "Am I on pace for my monthly transaction goal?",
+                  "What fell through the cracks this week?",
+                  "What one system would have prevented that?",
+                  "What am I doing that someone else should be doing?",
+                ].map((q, i) => (
+                  <div key={i} style={{ paddingLeft: 20, position: "relative" }}>
+                    <span style={{ position: "absolute", left: 0, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#F4A261" }}>{i + 1}.</span>{q}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
